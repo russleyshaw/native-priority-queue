@@ -1,0 +1,9 @@
+{
+  "C_Cpp.default.includePath": ["${default}", "./include"],
+  "files.associations": {
+    "system_error": "cpp",
+    "xlocale": "cpp",
+    "xiosbase": "cpp",
+    "queue": "cpp"
+  }
+}
