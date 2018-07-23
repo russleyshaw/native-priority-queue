@@ -1,5 +1,5 @@
-export class PriorityQueue<T> {
-  constructor();
+export class PriorityQueue<T extends {}> {
+  constructor(priority: (value: T) => number);
 
   empty(): boolean;
   size(): number;
