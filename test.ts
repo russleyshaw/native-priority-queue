@@ -22,7 +22,7 @@ function pushValue<T>(pq: PriorityQueue<T>, val: T) {
   pq.push(val);
 }
 
-const pq = new PriorityQueue<Person>();
+const pq = new PriorityQueue<Person>(p => p.age);
 showMeta(pq);
 pushValue(pq, { name: "Ruski", age: 24 });
 showMeta(pq);

@@ -2,8 +2,8 @@
 #include <vector>
 #include <cassert>
 
-#include "priority_queue.hpp";
-#include "napipp.hpp";
+#include "priority_queue.hpp"
+#include "napipp.hpp"
 
 napi_ref Priority_queue::constructor;
 
@@ -60,7 +60,7 @@ napi_value Priority_queue::New(napi_env env, napi_callback_info info)
 		status = napi_get_cb_info(env, info, &argc, argv, &jsthis, nullptr);
 		CHECK_OK(status);
 
-		if (argc < 1 || napipp::typeof(env, argv[0]) != napi_function)
+		if (argc < 1 || napipp::typeof_value(env, argv[0]) != napi_function)
 		{
 			napi_throw_type_error(env, "type", "Expected a function");
 			return napipp::get_undefined(env);
@@ -95,7 +95,6 @@ napi_value Priority_queue::New(napi_env env, napi_callback_info info)
 
 napi_value Priority_queue::GetIsEmpty(napi_env env, napi_callback_info cbinfo)
 {
-	napi_status status;
 	napipp::Callback_info<Priority_queue> info(env, cbinfo);
 	auto obj = info.cthis;
 
@@ -128,7 +127,7 @@ napi_value Priority_queue::PushValues(napi_env env, napi_callback_info cbinfo)
 		auto priority_func = napipp::get_reference_value(env, obj->_priority_func);
 		NAPIPP_CHECK_VALUE_TYPE(env, priority_func, napi_function);
 		auto func_return = napipp::call_function(env, priority_func, {arg});
-		NAPIPP_CHECK_VALUE_TYPE(env, priority_func, napi_number);
+		NAPIPP_CHECK_VALUE_TYPE(env, func_return, napi_number);
 		auto priority = napipp::get_value_double(env, func_return);
 
 		auto ref = napipp::create_reference(env, arg, 1);
