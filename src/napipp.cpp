@@ -95,4 +95,42 @@ double get_value_double(napi_env env, napi_value value)
 	return result;
 }
 
+napi_value create_object(napi_env env)
+{
+	napi_value result;
+	auto status = napi_create_object(env, &result);
+	CHECK_OK(status);
+	return result;
+}
+
+void set_property(napi_env env, napi_value object, napi_value key, napi_value value)
+{
+	auto status = napi_set_property(env, object, key, value);
+	CHECK_OK(status);
+}
+
+void set_property(napi_env env, napi_value object, std::string key, napi_value value)
+{
+	auto k = napipp::create_string(env, key);
+	auto status = napi_set_property(env, object, k, value);
+	CHECK_OK(status);
+}
+
+
+napi_value get_property(napi_env env, napi_value object, napi_value key)
+{
+	napi_value result;
+	auto status = napi_get_property(env, object, key, &result);
+	CHECK_OK(status);
+	return result;
+}
+napi_value get_property(napi_env env, napi_value object, std::string key)
+{
+	napi_value result;
+	auto k = napipp::create_string(env, key);
+	auto status = napi_get_property(env, object, k, &result);
+	CHECK_OK(status);
+	return result;
+}
+
 } // namespace napipp

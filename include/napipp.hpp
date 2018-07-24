@@ -35,6 +35,13 @@ napi_value create_string(napi_env env, std::string str);
 void reference_unref(napi_env env, napi_ref ref);
 napi_value call_function(napi_env env, napi_value func, std::vector<napi_value> args);
 double get_value_double(napi_env env, napi_value value);
+napi_value create_object(napi_env env);
+
+void set_property(napi_env env, napi_value object, napi_value key, napi_value value);
+void set_property(napi_env env, napi_value object, std::string key, napi_value value);
+
+napi_value get_property(napi_env env, napi_value object, napi_value key);
+napi_value get_property(napi_env env, napi_value object, std::string key);
 
 template <typename T>
 class Callback_info

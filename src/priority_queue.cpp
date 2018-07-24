@@ -121,7 +121,9 @@ napi_value Priority_queue::PushValues(napi_env env, napi_callback_info cbinfo)
 
 	for (auto arg : info.args)
 	{
-		NAPIPP_CHECK_VALUE_TYPE(env, arg, napi_object);
+		auto holder_obj = napipp::create_object(env);
+		napipp::set_property(env, holder_obj, "value", arg);
+		auto holder_ref = napipp::create_reference(env, holder_obj, 1);
 
 		// Get priority value
 		auto priority_func = napipp::get_reference_value(env, obj->_priority_func);
@@ -130,9 +132,9 @@ napi_value Priority_queue::PushValues(napi_env env, napi_callback_info cbinfo)
 		NAPIPP_CHECK_VALUE_TYPE(env, func_return, napi_number);
 		auto priority = napipp::get_value_double(env, func_return);
 
-		auto ref = napipp::create_reference(env, arg, 1);
+		
 		Queue_value qval;
-		qval.value = ref;
+		qval.value = holder_ref;
 		qval.priority = priority;
 		obj->_pq.push(qval);
 	}
@@ -150,7 +152,9 @@ napi_value Priority_queue::GetTop(napi_env env, napi_callback_info cbinfo)
 		return napipp::get_undefined(env);
 	}
 
-	auto value = napipp::get_reference_value(env, obj->_pq.top().value);
+	auto holder_ref = obj->_pq.top().value;
+	auto holder_obj = napipp::get_reference_value(env, holder_ref);
+	auto value = napipp::get_property(env, holder_obj, "value");
 	return value;
 }
 
@@ -162,9 +166,9 @@ napi_value Priority_queue::PopValue(napi_env env, napi_callback_info cbinfo)
 
 	if (!obj->_pq.empty())
 	{
-		auto val = obj->_pq.top();
+		auto holder_ref = obj->_pq.top().value;
 		obj->_pq.pop();
-		napipp::reference_unref(env, val.value);
+		napipp::reference_unref(env, holder_ref);
 	}
 
 	auto result = napipp::get_undefined(env);
